@@ -1,0 +1,11 @@
+name = "test2"
+main = "build/worker/shim.mjs"
+compatibility_date = "2024-12-10"
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "d1-test2"
+database_id = "a0afdfa6-da15-4695-8ed2-c6a9cc77be5c"
