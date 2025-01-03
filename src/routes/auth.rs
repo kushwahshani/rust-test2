@@ -13,7 +13,7 @@ struct Shop {
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let client_id = "fe56c0cf0d804e83ddbbce365e1c2353"; 
     let scope = "read_products";
-    let redirect_url = "http://127.0.0.1:8787/token";
+    let redirect_url = "https://test2.shanikushwahonline.workers.dev/token";
     // Get D1 database binding
     let d1 = ctx.env.d1("DB")?;
 
