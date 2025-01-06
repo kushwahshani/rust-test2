@@ -10,7 +10,7 @@ use worker::{Request, Response, Result, RouteContext, Url};
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: i64,
+    installation: f64,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -40,7 +40,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         let query_result = statement.first::<Shop>(None).await?;
         //  let results: Option<Shop> = statement.first(None).await?;
         if let Some(shop) = query_result {
-            if shop.installation == 1 {
+            if shop.installation == 1.0 {
                 let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
                 return Response::redirect(redirect_url);
             } else {
@@ -51,13 +51,13 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
                                     "https://{}/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state=nonce",
                                     shop_name, client_id, scope, redirect_url
                                 ))?;
-                    return Response::redirect(shop_url);
+            return Response::redirect(shop_url);
         }
-        return Response::from_json(&json!({
-            "status": "success",
-            "message": "this is shop name",
-            "auth_token": shop_name
-        }));
+        // return Response::from_json(&json!({
+        //     "status": "success",
+        //     "message": "this is shop name",
+        //     "auth_token": shop_name
+        // }));
     }
     return Response::from_json(&json!({
         "status": "success",
@@ -91,7 +91,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     // }
 
     // Return a response including the received shop name
-    let response = Response::ok(format!("Received shop name:"))?;
+    // let response = Response::ok(format!("Received shop name:"))?;
 
-    Ok(response)
+    // Ok(response)
 }
