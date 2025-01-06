@@ -1,7 +1,7 @@
 use crate::wasm_bindgen::JsValue;
 // use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use worker::{Request, Response, Result, RouteContext, Url};
+use worker::{console_log, Request, Response, Result, RouteContext, Url};
 
 #[derive(Deserialize, Serialize)]
 struct Shop {
@@ -24,6 +24,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .find(|(key, _)| key == "shop")
         .map(|(_, value)| value.to_string())
         .unwrap_or_default(); // Default to an empty string if "shop" is not found
+    console_log!("Shop name extracted: {}", shop_name);
 
     if shop_name.is_empty() {
         return Response::error("Shop name is required", 400);
