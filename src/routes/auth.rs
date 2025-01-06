@@ -34,8 +34,9 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
 
     // Check if the shop is already installed
     let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
+    
     console_log!("Preparing query: {}", check_query);
-
+    println!("check query :{:?}",check_query);
     // let statement = d1
     //     .prepare(check_query)
     //     .bind(&[JsValue::from(shop_name.clone())])?;
