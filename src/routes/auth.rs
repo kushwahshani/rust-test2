@@ -1,21 +1,21 @@
-use crate::wasm_bindgen::JsValue;
+// use crate::wasm_bindgen::JsValue;
 // use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use worker::{console_log, Request, Response, Result, RouteContext, Url};
 
-use super::shop_name;
+// use super::shop_name;
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: f32,
+    installation: i64,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
-    let client_id = "fe56c0cf0d804e83ddbbce365e1c2353";
-    let scope = "read_products";
-    let redirect_url = "https://test2.shanikushwahonline.workers.dev/token";
+    // let client_id = "fe56c0cf0d804e83ddbbce365e1c2353";
+    // let scope = "read_products";
+    // let redirect_url = "https://test2.shanikushwahonline.workers.dev/token";
     // Get D1 database binding
     let d1 = ctx.env.d1("DB")?;
 
@@ -32,7 +32,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     // Response::ok(format!("Received shop name: {}", shop_name))?;
 
     if let Some(shop_name) = shop_name {
-        // console_log!("test 2{}", shop.clone());
+        console_log!("test 2{}", shop_name.clone());
 
         let check_query = "SELECT shop, auth_token, installation FROM appshop WHERE shop = ?";
 
