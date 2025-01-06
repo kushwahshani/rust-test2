@@ -33,17 +33,18 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     // Response::ok(format!("Received shop name: {}", shop_name))?;
 
     // Check if the shop is already installed
-    // let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
+    let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
     
-    // console_log!("Preparing query: {}", check_query);
-    // println!("check query :{:?}",check_query);
+    console_log!("Preparing query: {}", check_query);
+    println!("check query :{:?}",check_query);
 
-    // let statement = d1
-    //     .prepare(check_query)
-    //     .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
+    let statement = d1
+        .prepare(check_query)
+        .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
     // let query_result = statement.first::<Shop>(None).await?;
+    let results: Option<Shop> = statement.first(None).await?;
 
-    // console_log!("Query result: {:?}", query_result);
+    console_log!("Query result: {:?}", results);
     // if let Some(shop) = query_result {
     //     if shop.installation == 1.0 {
     //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
