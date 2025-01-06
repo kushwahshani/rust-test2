@@ -37,10 +37,10 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     
     console_log!("Preparing query: {}", check_query);
     println!("check query :{:?}",check_query);
-    // let statement = d1
-    //     .prepare(check_query)
-    //     .bind(&[JsValue::from(shop_name.clone())])?;
-    // let query_result = statement.first::<Shop>(None).await?;
+    let statement = d1
+        .prepare(check_query)
+        .bind(&[JsValue::from(shop_name.clone())])?;
+    let query_result = statement.first::<Shop>(None).await?;
 
     // console_log!("Query result: {:?}", query_result);
     // if let Some(shop) = query_result {
