@@ -34,7 +34,8 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
     let statement = d1
         .prepare(check_query)
-        .bind(&[JsValue::from(shop_name.clone())])?;
+        // .bind(&[JsValue::from(shop_name.clone())])?;
+        .bind(&[JsValue::from(shop_name.as_str())])?;
     let query_result = statement.first::<Shop>(None).await?;
 
     console_log!("Query result: {:?}", query_result);
