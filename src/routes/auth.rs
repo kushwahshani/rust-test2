@@ -37,12 +37,13 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     
     console_log!("Preparing query: {}", check_query);
     println!("check query :{:?}",check_query);
+
     let statement = d1
         .prepare(check_query)
-        .bind(&[JsValue::from(shop_name.clone())])?;
+        .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
     let query_result = statement.first::<Shop>(None).await?;
 
-    // console_log!("Query result: {:?}", query_result);
+    console_log!("Query result: {:?}", query_result);
     // if let Some(shop) = query_result {
     //     if shop.installation == 1.0 {
     //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
