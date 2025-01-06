@@ -26,9 +26,9 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .unwrap_or_default(); // Default to an empty string if "shop" is not found
     
 
-    if shop_name.is_empty() {
-        return Response::error("Shop name is required", 400);
-    }
+    // if shop_name.is_empty() {
+    //     return Response::error("Shop name is required", 400);
+    // }
 
     // Check if the shop is already installed
     // let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
