@@ -38,7 +38,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
 
     if let Some(shop) = query_result {
         if shop.installation == 1.0 {
-            let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
+            let redirect_url = Url::parse("https://72ca2761.shopify-test1.pages.dev/home")?;
             return Response::redirect(redirect_url);
         } else {
             return Response::error("Shop exists but is not installed", 400);
