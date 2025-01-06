@@ -34,28 +34,27 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
     let statement = d1
         .prepare(check_query)
-        // .bind(&[JsValue::from(shop_name.clone())])?;
-        .bind(&[JsValue::from(shop_name.as_str())])?;
+        .bind(&[JsValue::from(shop_name.clone())])?;
     let query_result = statement.first::<Shop>(None).await?;
 
     console_log!("Query result: {:?}", query_result);
-    // if let Some(shop) = query_result {
-    //     if shop.installation == 1.0 {
-    //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
-    //         return Response::redirect(redirect_url);
-    //     } else {
-    //         return Response::error("Shop exists but is not installed", 400);
-    //     }
-    // } else {
-    //     let shop_url = Url::parse(&format!(
-    //                     "https://{}/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state=nonce",
-    //                     shop_name, client_id, scope, redirect_url
-    //                 ))?;
-    //     return Response::redirect(shop_url);
-    // }
+    if let Some(shop) = query_result {
+        if shop.installation == 1.0 {
+            let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
+            return Response::redirect(redirect_url);
+        } else {
+            return Response::error("Shop exists but is not installed", 400);
+        }
+    } else {
+        let shop_url = Url::parse(&format!(
+                        "https://{}/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state=nonce",
+                        shop_name, client_id, scope, redirect_url
+                    ))?;
+        return Response::redirect(shop_url);
+    }
 
     // Return a response including the received shop name
-    let response = Response::ok(format!("Received shop name: {}", shop_name))?;
+    // let response = Response::ok(format!("Received shop name: {}", shop_name))?;
 
-    Ok(response)
+    // Ok(response)
 }
