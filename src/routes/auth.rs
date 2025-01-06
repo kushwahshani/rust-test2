@@ -31,13 +31,13 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     }
 
     // Check if the shop is already installed
-    let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
-    let statement = d1
-        .prepare(check_query)
-        .bind(&[JsValue::from(shop_name.clone())])?;
-    let query_result = statement.first::<Shop>(None).await?;
+    // let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
+    // let statement = d1
+    //     .prepare(check_query)
+    //     .bind(&[JsValue::from(shop_name.clone())])?;
+    // let query_result = statement.first::<Shop>(None).await?;
 
-    console_log!("Query result: {:?}", query_result);
+    // console_log!("Query result: {:?}", query_result);
     // if let Some(shop) = query_result {
     //     if shop.installation == 1.0 {
     //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
