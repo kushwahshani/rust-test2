@@ -3,7 +3,7 @@ use crate::wasm_bindgen::JsValue;
 use serde::{Deserialize, Serialize};
 use worker::{console_log, Request, Response, Result, RouteContext, Url};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize,Debug)]
 struct Shop {
     shop: String,
     auth_token: String,
@@ -24,19 +24,20 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .find(|(key, _)| key == "shop")
         .map(|(_, value)| value.to_string())
         .unwrap_or_default(); // Default to an empty string if "shop" is not found
-    // console_log!("Shop name extracted: {}", shop_name);
+    
 
-    // if shop_name.is_empty() {
-    //     return Response::error("Shop name is required", 400);
-    // }
+    if shop_name.is_empty() {
+        return Response::error("Shop name is required", 400);
+    }
 
-    // // Check if the shop is already installed
-    // let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
-    // let statement = d1
-    //     .prepare(check_query)
-    //     .bind(&[JsValue::from(shop_name.clone())])?;
-    // let query_result = statement.first::<Shop>(None).await?;
+    // Check if the shop is already installed
+    let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
+    let statement = d1
+        .prepare(check_query)
+        .bind(&[JsValue::from(shop_name.clone())])?;
+    let query_result = statement.first::<Shop>(None).await?;
 
+    console_log!("Query result: {:?}", query_result);
     // if let Some(shop) = query_result {
     //     if shop.installation == 1.0 {
     //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
