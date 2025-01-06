@@ -3,7 +3,9 @@ use crate::wasm_bindgen::JsValue;
 use serde::{Deserialize, Serialize};
 use worker::{console_log, Request, Response, Result, RouteContext, Url};
 
-#[derive(Deserialize, Serialize,Debug)]
+use super::shop_name;
+
+#[derive(Deserialize, Serialize, Debug)]
 struct Shop {
     shop: String,
     auth_token: String,
@@ -11,40 +13,44 @@ struct Shop {
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
-    let client_id = "fe56c0cf0d804e83ddbbce365e1c2353"; 
+    let client_id = "fe56c0cf0d804e83ddbbce365e1c2353";
     let scope = "read_products";
     let redirect_url = "https://test2.shanikushwahonline.workers.dev/token";
     // Get D1 database binding
     let d1 = ctx.env.d1("DB")?;
-
 
     // Extract the shop ID from the query parameters
     let url = req.url()?;
     let shop_name = url
         .query_pairs()
         .find(|(key, _)| key == "shop")
-        .map(|(_, value)| value.to_string())
-        .unwrap_or_default(); // Default to an empty string if "shop" is not found
-    
+        .map(|(_, value)| value);
 
-    if shop_name.is_empty() {
-        return Response::error("Shop name is required", 400);
-    }
+    // if shop_name.is_empty() {
+    //     return Response::error("Shop name is required", 400);
+    // }
     // Response::ok(format!("Received shop name: {}", shop_name))?;
 
-    // Check if the shop is already installed
-    let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
-    
-    console_log!("Preparing query: {}", check_query);
-    println!("check query :{:?}",check_query);
+    if let Some(shop_name) = shop_name {
+        // console_log!("test 2{}", shop.clone());
 
-    let statement = d1
-        .prepare(check_query)
-        .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
-    // let query_result = statement.first::<Shop>(None).await?;
-    let results: Option<Shop> = statement.first(None).await?;
+        let check_query = "SELECT shop, auth_token, installation FROM appshop WHERE shop = ?";
 
-    console_log!("Query result: {:?}", results);
+        // Check if the shop is already installed
+        // let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
+
+        let statement = d1
+            .prepare(check_query)
+            .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
+        // let query_result = statement.first::<Shop>(None).await?;
+        let results: Option<Shop> = statement.first(None).await?;
+
+        console_log!("Query result: {:?}", results);
+        return Response::ok("shop name");
+    }
+    else {
+        return Response::error("this is an error", 400);
+    }
     // if let Some(shop) = query_result {
     //     if shop.installation == 1.0 {
     //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
@@ -61,8 +67,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     // }
 
     // Return a response including the received shop name
-    let response = Response::ok(format!("Received shop name: {}", shop_name))?;
+    // let response = Response::ok(format!("Received shop name: {}", shop_name))?;
 
-    Ok(response)
+    // Ok(response)
 }
-
