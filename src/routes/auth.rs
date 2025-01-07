@@ -2,7 +2,7 @@
 // use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use worker::{Request, Response, Result, RouteContext, Url};
+use worker::{console_log, Request, Response, Result, RouteContext, Url};
 
 // use super::shop_name;
 
@@ -10,7 +10,7 @@ use worker::{Request, Response, Result, RouteContext, Url};
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: f64,
+    installation: bool,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -42,11 +42,13 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         //  let results: Option<Shop> = statement.first(None).await?;
 
         if let Some(shop_value) = query_result {
-            if shop_value.installation == 1.0 {
+            if shop_value.installation {
                 return Response::redirect(Url::parse(&redirect_home)?);
             } else {
                 return Response::error("Shop exists but is not installed", 400);
             }
+
+            // console_log!("this is installation value : {:?}", shop_value);
         } else {
             let shop_url = Url::parse(&format!(
                                     "https://{}/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state=nonce",
@@ -72,7 +74,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     //     } else {
     //         return Response::error("Shop exists but is not installed", 400);
     //     }
-    // 
+    //
     // Return a response including the received shop name
     // let response = Response::ok(format!("Received shop name:"))?;
 
