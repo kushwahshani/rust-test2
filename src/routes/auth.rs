@@ -33,26 +33,34 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     //     return Response::error("Shop name is required", 400);
     // }
 
-    if let Some(shop_name) = shop_name {
+    if let Some(shop) = shop_name {
         let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
         let statement = d1
             .prepare(check_query)
-            .bind(&[shop_name.to_string().into()])?;
-        let query_result = statement.first::<Shop>(None).await?;
-        //  let results: Option<Shop> = statement.first(None).await?;
-
+            .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
+        
+        // let query_result = statement.first::<Shop>(None).await?;
+         let query_result: Option<Shop> = statement.first(None).await?;
+        // return Response::from_json(&json!({
+        //     "status": "success",
+        //     "message": "this is a query result",
+        //     "auth_token": query_result
+        // }));
+        
+        console_log!("simple chack: {:?}",query_result);
         if let Some(shop_value) = query_result {
-            if shop_value.installation {
-                return Response::redirect(Url::parse(&redirect_home)?);
-            } else {
-                return Response::error("Shop exists but is not installed", 400);
-            }
+            console_log!("this is query result{:?}",&shop_value.installation);
+            // if shop_value.installation {
+            //     return Response::redirect(Url::parse(&redirect_home)?);
+            // } else {
+            //     return Response::error("Shop exists but is not installed", 400);
+            // }
 
             // console_log!("this is installation value : {:?}", shop_value);
         } else {
             let shop_url = Url::parse(&format!(
                                     "https://{}/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state=nonce",
-                                    shop_name, client_id, scope, redirect_url
+                                    shop, client_id, scope, redirect_url
                                 ))?;
             return Response::redirect(shop_url);
         }
@@ -65,7 +73,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     return Response::from_json(&json!({
         "status": "success",
         "message": "Token generated and shop installed",
-        "auth_token": shop_name
+        // "auth_token": shop_name
     }));
     // if let Some(shop) = query_result {
     //     if shop.installation == 1.0 {
