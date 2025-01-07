@@ -10,7 +10,7 @@ use worker::{console_log, Request, Response, Result, RouteContext, Url};
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: i64,
+    installation: f64,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -37,7 +37,15 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
             .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
         
         // let query_result = statement.first::<Shop>(None).await?;
-         let query_result: Option<Shop> = statement.first(None).await?;
+        //  let query_result: Option<Shop> = statement.first(None).await?;
+        let query_result: Option<Shop> = match statement.first(None).await {
+            Ok(result) => result,
+            Err(e) => {
+                console_log!("Error executing query: {:?}", e);
+                return Response::error("Database query failed", 500);
+            }
+        };
+
         // return Response::from_json(&json!({
         //     "status": "success",
         //     "message": "this is a query result",
