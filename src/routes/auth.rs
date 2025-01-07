@@ -29,9 +29,6 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .find(|(key, _)| key == "shop")
         .map(|(_, value)| value);
 
-    // if shop_name.is_empty() {
-    //     return Response::error("Shop name is required", 400);
-    // }
 
     if let Some(shop) = shop_name {
         let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
@@ -64,27 +61,11 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
                                 ))?;
             return Response::redirect(shop_url);
         }
-        // return Response::from_json(&json!({
-        //     "status": "success",
-        //     "message": "this is shop name",
-        //     "auth_token": shop_name
-        // }));
     }
     return Response::from_json(&json!({
-        "status": "success",
-        "message": "Token generated and shop installed",
+        "status": "error",
+        "message": "missing shop query perameter",
         // "auth_token": shop_name
     }));
-    // if let Some(shop) = query_result {
-    //     if shop.installation == 1.0 {
-    //         let redirect_url = Url::parse("https://shopify-test1.pages.dev/home")?;
-    //         return Response::redirect(redirect_url);
-    //     } else {
-    //         return Response::error("Shop exists but is not installed", 400);
-    //     }
-    //
-    // Return a response including the received shop name
-    // let response = Response::ok(format!("Received shop name:"))?;
-
-    // Ok(response)
+   
 }
