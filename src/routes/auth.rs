@@ -29,13 +29,13 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .find(|(key, _)| key == "shop")
         .map(|(_, value)| value);
 
-    if shop_name.is_none(){
-        // return Response::error("Missing shop query parameter", 400);
-        return Response:: from_json(&json!({
-            "status" : "error",
-             "message": "Missing shop query parameter"
-        }));
-    }
+    // if shop_name.is_none(){
+    //     // return Response::error("Missing shop query parameter", 400);
+    //     return Response:: from_json(&json!({
+    //         "status" : "error",
+    //          "message": "Missing shop query parameter"
+    //     }));
+    // }
 
     if let Some(shop) = shop_name {
         let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
