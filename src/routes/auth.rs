@@ -41,8 +41,9 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
         let statement = d1
             .prepare(check_query)
-            .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
-
+            .bind(&[shop.to_string().into()])?;
+        
+        // .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
         // let query_result = statement.first::<Shop>(None).await?;
         //  let query_result: Option<Shop> = statement.first(None).await?;
 
@@ -60,9 +61,9 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         //     "query result": query_result
         // }));
 
-        console_log!("simple chack: {:?}", query_result);
+        // console_log!("simple chack: {:?}", query_result);
         if let Some(shop_value) = query_result {
-            console_log!("this is query result{:?}", &shop_value.installation);
+            // console_log!("this is query result{:?}", &shop_value.installation);
             if shop_value.installation == 1 {
                 return Response::redirect(Url::parse(&redirect_home)?);
             } else {
