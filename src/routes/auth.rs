@@ -10,7 +10,7 @@ use worker::{console_log, Request, Response, Result, RouteContext, Url};
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: bool,
+    installation: i64,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {

@@ -1,6 +1,7 @@
 use crate::wasm_bindgen::JsValue;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use url::Url;
 use worker::{Request, Response, Result, RouteContext};
 
 // access token struct
@@ -20,6 +21,7 @@ struct TokenResponse {
 
 // Shopify OAuth Access Token
 pub async fn generate_token(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    let redirect_home = "https://shopify-test1.pages.dev/home";
     // Extract the required query perameters
     let url = req.url()?;
     let shop = url
@@ -76,10 +78,7 @@ pub async fn generate_token(req: Request, ctx: RouteContext<()>) -> Result<Respo
                     .bind(&[JsValue::from(shop), JsValue::from(access_token.clone()), JsValue::from(true)])?
                     .run()
                     .await?;
-                return Response::ok(format!(
-                    "Access token generated and saved successfully, Access Token : {}",
-                    access_token
-                ));
+                return Response::redirect(Url::parse(&redirect_home)?);
             } else {
                 return Response::error("Failed to fetch access token", 404);
             }
