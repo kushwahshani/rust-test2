@@ -10,7 +10,7 @@ use worker::{console_log, Request, Response, Result, RouteContext, Url};
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: f64,
+    installation: i32,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -38,6 +38,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         
         // let query_result = statement.first::<Shop>(None).await?;
         //  let query_result: Option<Shop> = statement.first(None).await?;
+
         let query_result: Option<Shop> = match statement.first(None).await {
             Ok(result) => result,
             Err(e) => {
@@ -49,7 +50,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         // return Response::from_json(&json!({
         //     "status": "success",
         //     "message": "this is a query result",
-        //     "auth_token": query_result
+        //     "query result": query_result
         // }));
         
         console_log!("simple chack: {:?}",query_result);
@@ -73,7 +74,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     return Response::from_json(&json!({
         "status": "error",
         "message": "missing shop query perameter",
-        // "auth_token": shop_name
+        // "shop name": shop_name
     }));
    
 }
