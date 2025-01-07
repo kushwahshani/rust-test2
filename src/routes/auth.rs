@@ -29,13 +29,20 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .find(|(key, _)| key == "shop")
         .map(|(_, value)| value);
 
+    if shop_name.is_none(){
+        return Response::error("Missing shop query parameter", 400);
+        // return Response:: from_json(&json!({
+        //     "status" : "error",
+        //      "message": "Missing shop query parameter"
+        // }));
+    }
 
     if let Some(shop) = shop_name {
         let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
         let statement = d1
             .prepare(check_query)
             .bind(&["ac-dev-25.myshopify.com".to_string().into()])?;
-        
+
         // let query_result = statement.first::<Shop>(None).await?;
         //  let query_result: Option<Shop> = statement.first(None).await?;
 
@@ -52,10 +59,10 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         //     "message": "this is a query result",
         //     "query result": query_result
         // }));
-        
-        console_log!("simple chack: {:?}",query_result);
+
+        console_log!("simple chack: {:?}", query_result);
         if let Some(shop_value) = query_result {
-            console_log!("this is query result{:?}",&shop_value.installation);
+            console_log!("this is query result{:?}", &shop_value.installation);
             if shop_value.installation == 1 {
                 return Response::redirect(Url::parse(&redirect_home)?);
             } else {
@@ -71,12 +78,10 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
             return Response::redirect(shop_url);
         }
     }
-    // return Response::from_json(&json!({
-    //     "status": "error",
-    //     "message": "missing shop query perameter",
-    //     // "shop name": shop_name
+    return Response::from_json(&json!({
+        "status": "error",
+        "message": "missing shop query perameter",
+        // "shop name": shop_name
 
-    // }));
-    Response::error("Shop name is required", 400)
-   
+    }));
 }
