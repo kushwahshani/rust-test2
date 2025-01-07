@@ -28,8 +28,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         .query_pairs()
         .find(|(key, _)| key == "shop")
         .map(|(_, value)| value);
-
-    if shop_name == shop_name{
+    
 
     if let Some(shop) = shop_name {
         let check_query = "SELECT shop, auth_token, installation FROM shops WHERE shop = ?";
@@ -73,11 +72,4 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         // "shop name": shop_name
 
     }));
-
-    }else {
-        return Response:: from_json(&json!({
-            "status" : "error",
-             "message": "Missing shop "
-        }));
-    }
 }
