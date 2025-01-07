@@ -71,10 +71,12 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
             return Response::redirect(shop_url);
         }
     }
-    return Response::from_json(&json!({
-        "status": "error",
-        "message": "missing shop query perameter",
-        // "shop name": shop_name
-    }));
+    // return Response::from_json(&json!({
+    //     "status": "error",
+    //     "message": "missing shop query perameter",
+    //     // "shop name": shop_name
+
+    // }));
+    Response::error("Shop name is required", 400)
    
 }

@@ -23,3 +23,5 @@ CREATE TABLE IF NOT EXISTS shops(
 
 wrangler d1 execute DB --local --command "CREATE TABLE IF NOT EXISTS shops ( shop VARCHAR(100) PRIMARY KEY,auth_token VARCHAR(100),installation BOOLEAN);"
  wrangler d1 execute DB --local --command "DROP TABLE IF EXISTS shops;"  
+--  online create a table in cloudflare
+ wrangler d1 execute DB --remote --command "CREATE TABLE IF NOT EXISTS shops ( shop VARCHAR(100) PRIMARY KEY,auth_token VARCHAR(100),installation BOOLEAN);"
