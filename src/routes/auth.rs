@@ -10,7 +10,7 @@ use worker::{console_log, Request, Response, Result, RouteContext, Url};
 struct Shop {
     shop: String,
     auth_token: String,
-    installation: String,
+    installation: i32,
 }
 
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -56,11 +56,11 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         console_log!("simple chack: {:?}",query_result);
         if let Some(shop_value) = query_result {
             console_log!("this is query result{:?}",&shop_value.installation);
-            // if shop_value.installation {
-            //     return Response::redirect(Url::parse(&redirect_home)?);
-            // } else {
-            //     return Response::error("Shop exists but is not installed", 400);
-            // }
+            if shop_value.installation == 1 {
+                return Response::redirect(Url::parse(&redirect_home)?);
+            } else {
+                return Response::error("Shop exists but is not installed", 400);
+            }
 
             // console_log!("this is installation value : {:?}", shop_value);
         } else {
