@@ -16,7 +16,7 @@ struct Shop {
 pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     // console_log!("this is auth function");
     let client_id = "fe56c0cf0d804e83ddbbce365e1c2353";
-    let scope = "read_products, read_orders, write_products";
+    let scope = "read_products,read_orders,write_orders,write_products";
     let redirect_url = "https://test2.shanikushwahonline.workers.dev/token";
     let redirect_home = "https://shopify-test1.pages.dev/home";
     // Get D1 database binding
