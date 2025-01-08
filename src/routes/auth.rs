@@ -47,7 +47,7 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
                 return Response::error("Database query failed", 500);
             }
         };
-
+        // Check app install or not
         // console_log!("simple chack: {:?}", query_result);
         if let Some(shop_value) = query_result {
             // console_log!("this is query result{:?}", &shop_value.installation);
@@ -57,7 +57,6 @@ pub async fn auth(req: Request, ctx: RouteContext<()>) -> Result<Response> {
                 return Response::error("Shop exists but is not installed", 400);
             }
 
-            // console_log!("this is installation value : {:?}", shop_value);
         } else {
             let shop_url = Url::parse(&format!(
                                     "https://{}/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state=nonce",

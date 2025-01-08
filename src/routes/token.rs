@@ -2,7 +2,7 @@ use crate::wasm_bindgen::JsValue;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use url::Url;
-use worker::{Request, Response, Result, RouteContext};
+use worker::{console_log, Request, Response, Result, RouteContext};
 
 // access token struct
 #[derive(Deserialize, Serialize)]
@@ -69,6 +69,7 @@ pub async fn generate_token(req: Request, ctx: RouteContext<()>) -> Result<Respo
                 let token_response: TokenResponse = resp.json().await.unwrap();
                 let access_token = token_response.access_token;
                 // return Response::ok(format!("Access Token: {}", access_token ));
+                console_log!("Access Token: {:?}",access_token);
 
                 // // record insert in database like a shop name and token instalation true and false
                 let d1 = ctx.env.d1("DB")?;
