@@ -15,6 +15,7 @@ async fn fetch(req: Request,env: Env,_ctx: Context,
    .post_async("/shop", routes::shop_name::shop_name)
    .get_async("/auth", routes::auth::auth)
    .get_async("/token", routes::token::generate_token)
+   .get_async("/hello", routes::codewhize::codewhize)
    .run(req, env)
    .await
 

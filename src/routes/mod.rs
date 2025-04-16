@@ -5,3 +5,4 @@ pub mod delete;
 pub mod shop_name;
 pub mod auth;
 pub mod token;
+pub mod codewhize;
